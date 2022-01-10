@@ -1,0 +1,9 @@
+name: diadoc_api
+version: 0.1.0
+
+authors:
+  - Mikhail <marzhaev@texenergo.com>
+
+crystal: ">=1.2.0"
+
+license: MIT
