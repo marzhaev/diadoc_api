@@ -1,4 +1,5 @@
 require "json"
+require "./address"
 
 module DiadocApi
   module Entity
@@ -14,8 +15,7 @@ module DiadocApi
       include JSON::Serializable::Strict
 
       {% for f in ["OrgIdGuid", "OrgId", "Inn", "Kpp?", "FullName", "ShortName", "Ogrn?", "FnsParticipantId", "IfnsCode?", "Sociability", "CertificateOfRegistryInfo?"] %}
-        @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
-        property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : String{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
+        diadoc_property({{ f.id.stringify }}, String)
       {% end %}
 
       {% for f in ["JoinedDiadocTreaty", "IsPilot", "IsActive", "IsTest", "IsBranch", "IsRoaming", "IsEmployee", "IsForeign", "HasCertificateToSign"] %}
@@ -32,10 +32,10 @@ module DiadocApi
       property boxes : Array(Box)
 
       @[JSON::Field(key: "Departments")]
-      property departments : Array(String)
+      property departments : Array(Department)
 
       @[JSON::Field(key: "Address")]
-      property address : Entity::Address
+      property address : DiadocApi::Entity::Address
 
       {% for f in ["FnsRegistrationDate?", "LiquidationDate?"] %}
         @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]

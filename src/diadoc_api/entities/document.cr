@@ -4,9 +4,8 @@ module DiadocApi
       include JSON::Serializable
       include JSON::Serializable::Strict
 
-      {% for f in ["IndexKey?", "MessageId", "EntityId", "CounteragentBoxId?", "FileName?", "DocumentDate?", "DocumentNumber?", "DepartmentId?", "FromDepartmentId?", "ToDepartmentId?", "CustomDocumentId?", "PacketId?", "RoamingNotificationStatusDescription?", "ResolutionRouteId?", "AttachmentVersion?", "TypeNamedId", "Function", "Title", "EditingSettingId?", "Version", "ProxyBoxId?", "ProxyDepartmentId?"] %}
-        @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
-        property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : String{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
+      {% for f in ["IndexKey?", "MessageId", "EntityId", "CounteragentBoxId?", "FileName?", "DocumentDate?", "DocumentNumber?", "DepartmentId?", "FromDepartmentId?", "ToDepartmentId?", "CustomDocumentId?", "PacketId?", "RoamingNotificationStatusDescription?", "ResolutionRouteId?", "AttachmentVersion?", "TypeNamedId", "Function", "Title", "EditingSettingId?", "Version", "ProxyBoxId?", "ProxyDepartmentId?", "EventId?"] %}
+        diadoc_property({{ f.id.stringify }}, String)
       {% end %}
 
       {% for f in ["IsDeleted?", "IsTest?", "IsEncryptedContent?", "IsRead?", "PacketIsLocked?"] %}
@@ -16,7 +15,7 @@ module DiadocApi
 
       {% for f in ["CreationTimestampTicks", "SendTimestampTicks?", "DeliveryTimestampTicks?", "LastModificationTimestampTicks?"] %}
         @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
-        property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : Int64{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
+        property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : Wrappers::Ticks{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
       {% end %}
 
       {% for f in ["WorkflowId"] %}

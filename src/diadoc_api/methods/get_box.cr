@@ -1,13 +1,17 @@
+require "./methods_wrapper"
+
 module DiadocApi
-  class GetDocument < MethodsWrapper
-    def self.fetch(client : Client, box : Entity::Box, messageId : String, entityId : String)
+  class GetBox < MethodsWrapper
+
+    def self.fetch(client : Client, box : Entity::Box)
+      fetch(client: client, box_id: box.box_id)
+    end
+
+
+    def self.fetch(client : Client, box_id : String) : Entity::Box
       url = String.build do |io|
-        io << "https://diadoc-api.kontur.ru/V3/GetDocument?boxId="
-        io << box.box_id
-        io << "&messageId="
-        io << messageId
-        io << "&entityId="
-        io << entityId
+        io << "https://diadoc-api.kontur.ru/GetBox?boxId="
+        io << box_id
       end
 
       response = HTTP::Client.get(
@@ -21,7 +25,7 @@ module DiadocApi
 
       check_response(response)
 
-      return Entity::Document.from_json(response.body)
+      return Entity::Box.from_json(response.body)
     end
   end
 end

@@ -1,6 +1,7 @@
 require "uri"
 require "json"
 require "http"
+require "./diadoc_api/macros"
 require "./diadoc_api/**"
 
 module DiadocApi
