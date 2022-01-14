@@ -1,6 +1,6 @@
 module DiadocApi
   module Entity
-    class BoxEventList < AbstractEntity
+    class BoxEventList
       include JSON::Serializable
       include JSON::Serializable::Strict
 
