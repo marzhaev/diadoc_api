@@ -23,10 +23,11 @@ module DiadocApi
         property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : Int32{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
       {% end %}
 
-      {% for f in ["AmendmentRequestMetadata", "ConfirmationMetadata", "Content", "DocumentDirection", "DocflowStatus", "LockMode", "Origin?", "ProxySignatureStatus", "RecipientReceiptMetadata", "RecipientResponseStatus", "ResolutionStatus?", "RevocationStatus", "RoamingNotificationStatus", "SenderReceiptMetadata", "SenderSignatureStatus"] %}
-        @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
-        property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : {{ f.id }}{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
+      {% for f in ["AmendmentRequestMetadata", "ConfirmationMetadata", "Content", "DocumentDirection", "LockMode", "Origin?", "ProxySignatureStatus", "RecipientReceiptMetadata", "RecipientResponseStatus", "ResolutionStatus?", "RevocationStatus", "RoamingNotificationStatus", "SenderReceiptMetadata", "SenderSignatureStatus"] %}
+        diadoc_property( {{ f.id.stringify }}, {{ f.id }})
       {% end %}
+
+      diadoc_property("DocflowStatus", DocflowStatusV3)
 
       @[JSON::Field(key: "CustomData")]
       property custom_data : Array(CustomDataItem)
@@ -82,6 +83,10 @@ module DiadocApi
       {% end %}
 
       # Convenience methods
+      def docflow_status_v3 : DocflowStatusV3
+        docflow_status
+      end
+
       def get_document_number : String?
         if item = metadata.find{|m| m.key == "DocumentNumber"}
           return item.value

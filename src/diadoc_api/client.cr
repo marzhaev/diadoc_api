@@ -51,9 +51,19 @@ module DiadocApi
       GetCounteragents.fetch(self, organization, index_key)
     end
 
-    def get_document(box : Entity::Box, messageId : String, entityId : String)
+    def get_docflow_events(box : Entity::Box, request : Entity::GetDocflowEventsRequest)
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
-      GetDocument.fetch(self, box, messageId, entityId)
+      GetDocflowEvents.fetch(self, box, request)
+    end
+
+    def get_docflow_events(box_id : String, request : Entity::GetDocflowEventsRequest)
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      GetDocflowEvents.fetch(self, box_id, request)
+    end
+
+    def get_document(box : Entity::Box, message_id : String, entity_id : String)
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      GetDocument.fetch(self, box, message_id, entity_id)
     end
 
     def get_document_types(box : Entity::Box)
@@ -61,14 +71,19 @@ module DiadocApi
       GetDocumentTypes.fetch(self, box)
     end
 
+    def get_documents(box_id : String, index_key : String? = nil, filter_category : FilterCategory  = FilterCategory.default, from_document_date : Time? = nil, to_document_date : Time? = nil, counteragent_box_id : String? = nil) : Entity::DocumentList
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      GetDocuments.fetch(client: self, box_id: box_id, index_key: index_key, filter_category: filter_category, from_document_date: from_document_date, to_document_date: to_document_date, counteragent_box_id: counteragent_box_id)
+    end
+
     def get_documents(box : Entity::Box, index_key : String? = nil, filter_category : FilterCategory  = FilterCategory.default, from_document_date : Time? = nil, to_document_date : Time? = nil, counteragent_box : Entity::Box? = nil) : Entity::DocumentList
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GetDocuments.fetch(client: self, box: box, index_key: index_key, filter_category: filter_category, from_document_date: from_document_date, to_document_date: to_document_date, counteragent_box: counteragent_box)
     end
 
-    def get_entity_content(box : Entity::Box, messageId : String, entityId : String)
+    def get_entity_content(box : Entity::Box, message_id : String, entity_id : String)
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
-      GetEntityContent.fetch(self, box, messageId, entityId)
+      GetEntityContent.fetch(self, box, message_id, entity_id)
     end
 
     def get_last_event(box : Entity::Box)

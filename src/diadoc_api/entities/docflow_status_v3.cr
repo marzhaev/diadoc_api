@@ -1,6 +1,6 @@
 module DiadocApi
   module Entity
-    class DocflowStatus # Referred to as DocflowStatusV3 in API documentation.
+    class DocflowStatusV3
       include JSON::Serializable
       include JSON::Serializable::Strict
 

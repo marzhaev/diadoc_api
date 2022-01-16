@@ -32,7 +32,7 @@ module DiadocApi
     class StatusDetail
       include JSON::Serializable
       include JSON::Serializable::Strict
-      
+
       {% for f in ["Code", "Text"] %}
         @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
         property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : String{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
@@ -40,6 +40,14 @@ module DiadocApi
     end
 
     # OuterStatusType or StatusType?
+    enum OuterStatusType
+    UnknownType
+    Normal
+    Success
+    Warning
+    Error
+    end
+
     enum StatusType
     UnknownType
     Normal

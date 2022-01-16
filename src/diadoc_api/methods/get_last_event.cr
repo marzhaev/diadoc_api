@@ -21,8 +21,6 @@ module DiadocApi
 
       check_response(response)
 
-      puts response.body
-
       return Entity::BoxEvent.from_json(response.body)
     end
   end

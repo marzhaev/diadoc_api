@@ -1,5 +1,9 @@
 module DiadocApi
   class GetDocuments < MethodsWrapper
+    def self.fetch(client : Client, box_id : String, index_key : String? = nil, filter_category : FilterCategory  = FilterCategory.default, from_document_date : Time? = nil, to_document_date : Time? = nil, counteragent_box_id : String? = nil) : Entity::DocumentList
+      fetch(client, box_id, index_key, filter_category, from_document_date, to_document_date, counteragent_box_id)
+    end
+
     def self.fetch(client : Client, box : Entity::Box, index_key : String? = nil, filter_category : FilterCategory  = FilterCategory.default, from_document_date : Time? = nil, to_document_date : Time? = nil, counteragent_box : Entity::Box? = nil) : Entity::DocumentList
       url = String.build do |io|
         io << "https://diadoc-api.kontur.ru/V3/GetDocuments?boxId="
