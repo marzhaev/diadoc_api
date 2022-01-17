@@ -4,14 +4,9 @@ module DiadocApi
       include JSON::Serializable
       include JSON::Serializable::Strict
 
-      @[JSON::Field(key: "Documents")]
-      property documents : Array(Document)
-
-      @[JSON::Field(key: "TotalCount")]
-      property total_count : Int32
-
-      @[JSON::Field(key: "HasMoreResults")]
-      property has_more_results : Bool?
+      diadoc_property("Documents", Array(Document))
+      diadoc_property("TotalCount", Int32)
+      diadoc_property("HasMoreResults?", Bool)
     end
   end
 end

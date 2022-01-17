@@ -89,7 +89,7 @@ module DiadocApi
 
       def get_document_number : String?
         if item = metadata.find{|m| m.key == "DocumentNumber"}
-          return item.value
+          return item.value.strip
         else
           document_number
         end
