@@ -3,7 +3,7 @@ require "./methods_wrapper"
 module DiadocApi
   class GeneratePrintForm < MethodsWrapper
 
-    def self.fetch(client : Client, box : Entity::Box, document : Entity::Document)
+    def self.fetch(client : Client, box : Entity::Box, document : Entity::Document) : String
       fetch(client: client, box_id: box.box_id, message_id: document.message_id, document_id: document.entity_id)
     end
 

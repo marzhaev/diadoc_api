@@ -1,6 +1,6 @@
 module DiadocApi
   class GetCounteragent < MethodsWrapper
-    def self.fetch(client : Client, organization : Organization, counteragent_org_id : String) : Entity::Counteragent
+    def self.fetch(client : Client, organization : Entity::Organization, counteragent_org_id : String) : Entity::Counteragent
       url = String.build do |io|
         io << "https://diadoc-api.kontur.ru/V2/GetCounteragent?myOrgId="
         io << organization.org_id

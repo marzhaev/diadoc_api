@@ -21,7 +21,7 @@ module DiadocApi
       @session_token = Authenticate.login(username: username, password: password, api_token: api_token)
     end
 
-    def generate_print_form(box : Entity::Box, document : Entity::Document)
+    def generate_print_form(box : Entity::Box, document : Entity::Document) : String
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GeneratePrintForm.fetch(self, box, document)
     end
@@ -44,6 +44,11 @@ module DiadocApi
     def get_content(type_name_id : String? = nil, function : String? = nil, version : String? = nil, title_index : String? = nil, content_type : String? = nil)
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GetContent.fetch(self, type_name_id, function, version, title_index, content_type)
+    end
+
+    def get_counteragent(organization : Entity::Organization, counteragent_org_id : String) : Entity::Counteragent
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      GetCounteragent.fetch(self, organization, counteragent_org_id)
     end
 
     def get_counteragents(organization : Entity::Organization, index_key : Int32? = nil) : Entity::CounteragentList
