@@ -1,6 +1,6 @@
 module DiadocApi
   class GetOrganizationsByInnKpp < MethodsWrapper
-    def self.fetch(client : Client, inn : String, kpp : String? = nil, include_relations : Bool? = false)
+    def self.fetch(client : Client, inn : String, kpp : String? = nil, include_relations : Bool? = false) : Entity::OrganizationList
       url = String.build do |io|
         io << "https://diadoc-api.kontur.ru/GetOrganizationsByInnKpp?inn="
         io << inn

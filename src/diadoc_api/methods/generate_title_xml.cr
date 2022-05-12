@@ -1,4 +1,4 @@
-require "./methods_wrapper"
+require "./xml_titles/upd_820"
 
 module DiadocApi
   class GenerateTitleXml < MethodsWrapper

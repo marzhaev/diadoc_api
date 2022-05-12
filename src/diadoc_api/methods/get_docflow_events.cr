@@ -22,8 +22,6 @@ module DiadocApi
 
       check_response(response)
 
-      puts response.body
-
       return Entity::GetDocflowEventsResponse.from_json(response.body)
     end
   end

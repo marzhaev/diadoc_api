@@ -21,6 +21,11 @@ module DiadocApi
       @session_token = Authenticate.login(username: username, password: password, api_token: api_token)
     end
 
+    def acquire_counteragent(org_id : String, request : Entity::AcquireCounteragentRequest)
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      AcquireCounteragent.fetch(self, org_id, request)
+    end
+
     def generate_print_form(box : Entity::Box, document : Entity::Document) : String
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GeneratePrintForm.fetch(self, box, document)
@@ -121,7 +126,7 @@ module DiadocApi
       GetNewEvents.fetch(self, box_id)
     end
 
-    def get_organizations_by_inn_kpp(inn : String, kpp : String? = nil, include_relations : Bool? = nil)
+    def get_organizations_by_inn_kpp(inn : String, kpp : String? = nil, include_relations : Bool? = nil) : Entity::OrganizationList
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GetOrganizationsByInnKpp.fetch(self, inn, kpp, include_relations)
     end
