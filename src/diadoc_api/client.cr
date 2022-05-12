@@ -31,6 +31,11 @@ module DiadocApi
       GeneratePrintForm.fetch(self, box_id, message_id, document_id)
     end
 
+    def generate_title_xml(box_id : String, body : String) : String
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      GenerateTitleXml.fetch(self, box_id, body: body)
+    end
+
     def get_box(box : Entity::Box) : Entity::Box
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GetBox.fetch(self, box: box)
@@ -121,16 +126,21 @@ module DiadocApi
       GetOrganizationsByInnKpp.fetch(self, inn, kpp, include_relations)
     end
 
+    def post_message(message : Entity::MessageToPost)
+      raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
+      PostMessage.fetch(self, message)
+    end
+
     # Convenience methods
 
     def all_counteragents(organization : Entity::Organization) : Array(Entity::Counteragent)
       return @all_counteragents.not_nil! unless @all_counteragents.nil?
       i = 0
       @all_counteragents = [] of Entity::Counteragent
-      while
+      while true
         r = get_counteragents(organization, i)
+        break if r.counteragents.empty?
         @all_counteragents = @all_counteragents.not_nil! + r.counteragents
-        break if r.total_count < 0
         i += 100
       end
 
@@ -141,7 +151,7 @@ module DiadocApi
       return @all_documents.not_nil! unless @all_documents.nil?
       index_key = ""
       @all_documents = [] of Entity::Document
-      while
+      while true
         r = get_documents(box: box, index_key: index_key, filter_category: filter_category, from_document_date: from_document_date, to_document_date: to_document_date, counteragent_box: counteragent_box)
         @all_documents = @all_documents.not_nil! + r.documents
         if last = r.documents.last?
