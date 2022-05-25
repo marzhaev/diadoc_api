@@ -136,8 +136,8 @@ module DiadocApi
           io << " SubtotalWithVatExcluded=\"#{@total_wo_vat}\""
           io << " Vat=\"#{@vat}\""
           io << " ItemMark=\"#{@item_mark.not_nil!.value}\""
-          io << " ItemVendorCode=\"#{@item_vendor_code}\""
-          io << " ItemArticle=\"#{@item_vendor_code}\""
+          io << " ItemVendorCode=\"#{@item_vendor_code}\"" unless @item_vendor_code.try(&.empty?)
+          io << " ItemArticle=\"#{@item_vendor_code}\"" unless @item_vendor_code.try(&.empty?)
           io << " Subtotal=\"#{@subtotal}\">"
             unless country_code.try(&.empty?) || declaration_number.try(&.empty?)
               io << "<CustomsDeclarations>"
