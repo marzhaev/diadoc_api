@@ -47,7 +47,7 @@ module DiadocApi
       {% end %}
 
       # Undocumented fields
-      {% for f in ["EntityIdGuid", "MessageIdGuid", "CreationTimestamp", "CounteragentBoxIdGuid"] %}
+      {% for f in ["EntityIdGuid", "MessageIdGuid", "CreationTimestamp", "CounteragentBoxIdGuid?"] %}
         @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
         property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : String{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
       {% end %}
