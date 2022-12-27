@@ -57,7 +57,7 @@ module DiadocApi
             io << "</PaymentDocuments>"
           end
           # Надо итого НДС и итого с НДС
-          io << "<Table Vat=\"#{vat_total}\" Total=\"#{total_w_vat}\">"
+          io << "<Table Vat=\"#{vat_total}\" Total=\"#{total_w_vat}\" TotalWithVatExcluded=\"#{total_w_vat - vat_total}\">"
             table_items.each do |item|
               io << item.to_xml
             end
