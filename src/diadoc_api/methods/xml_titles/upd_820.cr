@@ -13,8 +13,14 @@ module DiadocApi
     property signer_power_base : String?
     property table_items = [] of TableItem
     property payment_documents = [] of NamedTuple(date: Time, number: String, total: Float64)
+    # Используется для заполнения поля "Основания передачи" что под табличной частью с товарами в УПД.
+    property transfer_bases = [] of TransferBase
 
     def initialize(@seller_info : OrgInfo, @buyer_info : OrgInfo)
+    end
+
+    def add_transfer_base(base : TransferBase)
+      transfer_bases.push(base)
     end
 
     def to_xml : String
@@ -66,7 +72,15 @@ module DiadocApi
               io << item.to_xml
             end
           io << "</Table>"
-          io << "<TransferInfo OperationInfo=\"Товары переданы\"/>"
+          if transfer_bases.size > 0
+            io << "<TransferInfo OperationInfo=\"Товары переданы\">"
+              io << "<TransferBases>"
+                transfer_bases.each do |item|
+                  io << item.to_xml
+                end
+              io << "</TransferBases>"
+            io << "</TransferInfo>"
+          end
           io << "<Signers>"
             io << "<SignerDetails Inn=\"#{signer_inn}\""
             io << " LastName=\"#{signer_last_name}\""
@@ -110,6 +124,25 @@ module DiadocApi
       property building : String?
       property block : String?
       property appartment : String?
+    end
+
+    struct TransferBase
+      property document_name : String? = nil
+      property document_date : Time? = nil
+
+      def initialize(@document_name : String, @document_date : Time)
+      end
+
+      def to_xml : String
+        {% for ivar in @type.instance_vars %}
+          raise "Property '{{ ivar.id }}' not set" if @{{ ivar.id }}.nil?
+        {% end %}
+
+        String.build do |io|
+          io << "<TransferBase BaseDocumentName=\"#{@document_name.not_nil!}\" BaseDocumentDate=\"#{@document_date.not_nil!.to_s("%d.%m.%Y")}\">"
+          io << "</TransferBase>"
+        end
+      end
     end
 
     struct TableItem
