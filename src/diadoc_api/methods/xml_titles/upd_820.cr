@@ -65,7 +65,7 @@ module DiadocApi
           # Надо итого НДС и итого с НДС
           io << "<Table Vat=\"#{vat_total}\" Total=\"#{total_w_vat}\""
           if (l = total_w_vat) && (r = vat_total) && (l > r)
-            io << " TotalWithVatExcluded=\"#{l - r}\""
+            io << " TotalWithVatExcluded=\"#{(l - r).round(2)}\""
           end
           io << ">"
             table_items.each do |item|
