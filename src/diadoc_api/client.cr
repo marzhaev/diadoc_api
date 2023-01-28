@@ -61,7 +61,7 @@ module DiadocApi
       GetCounteragent.fetch(self, organization, counteragent_org_id)
     end
 
-    def get_counteragents(organization : Entity::Organization, index_key : Int32? = nil) : Entity::CounteragentList
+    def get_counteragents(organization : Entity::Organization, index_key : String? = nil) : Entity::CounteragentList
       raise Exceptions::Unauthenticated.new("Не авторизован") unless @session_token
       GetCounteragents.fetch(self, organization, index_key)
     end
@@ -140,13 +140,13 @@ module DiadocApi
 
     def all_counteragents(organization : Entity::Organization) : Array(Entity::Counteragent)
       return @all_counteragents.not_nil! unless @all_counteragents.nil?
-      i = 0
+      index_key : String? = nil
       @all_counteragents = [] of Entity::Counteragent
       while true
-        r = get_counteragents(organization, i)
+        r = get_counteragents(organization, index_key)
         break if r.counteragents.empty?
         @all_counteragents = @all_counteragents.not_nil! + r.counteragents
-        i += 100
+        index_key = r.counteragents.last.index_key
       end
 
       @all_counteragents.not_nil!

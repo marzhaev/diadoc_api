@@ -40,13 +40,13 @@ module DiadocApi
     end
 
     enum CounteragentStatus
-    UnknownCounteragentStatus
     IsMyCounteragent
     InvitesMe
     IsInvitedByMe
     RejectsMe
     IsRejectedByMe
     NotInCounteragentList
+    UnknownCounteragentStatus
     end
 
     class InvitationDocumentId
