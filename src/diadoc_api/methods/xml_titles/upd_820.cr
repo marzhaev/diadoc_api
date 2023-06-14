@@ -4,6 +4,7 @@ module DiadocApi
     property document_number : String?
     property seller_info : OrgInfo
     property buyer_info : OrgInfo
+    property consignee : OrgInfo?
     property vat_total : Float64?
     property total_w_vat : Float64?
     property signer_inn : String?
@@ -39,7 +40,6 @@ module DiadocApi
           io << "<Buyers>"
             io << "<Buyer>"
               organization_details(io, buyer_info)
-              # io << "<OrganizationReference OrgType=\"1\" BoxId=\"#{buyer_box_id}\"/>"
             io << "</Buyer>"
           io << "</Buyers>"
           io << "<Shippers>"
@@ -48,7 +48,7 @@ module DiadocApi
           io << "</Shippers>"
           io << "<Consignees>"
             io << "<Consignee>"
-              organization_details(io, buyer_info)
+              organization_details(io, consignee || buyer_info)
             io << "</Consignee>"
           io << "</Consignees>"
           if !payment_documents.empty?
@@ -199,7 +199,7 @@ module DiadocApi
 
       def to_diadoc : String
         case self
-        in Pack then "798"
+        in Pack then "778"
         in Piece then "796"
         in Meter then "006"
         in Kg then "166"
