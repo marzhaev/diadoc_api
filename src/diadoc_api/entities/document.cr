@@ -95,6 +95,16 @@ module DiadocApi
         end
       end
 
+      def get_document_date : Time?
+        date_str = if item = metadata.find{|m| m.key == "DocumentDate"}
+          item.value.strip
+        else
+          document_number
+        end
+
+        date_str.try{|str| Time.parse(str, "%d.%m.%y", Time::Location.load("Europe/Moscow"))}
+      end
+
       def get_total_sum : Float64?
         if item = metadata.find{|m| m.key == "TotalSum"}
           return item.value.to_f
