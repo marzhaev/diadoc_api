@@ -153,12 +153,11 @@ module DiadocApi
     end
 
     def all_documents(box : Entity::Box, index_key : String? = nil, filter_category : FilterCategory  = FilterCategory.default, from_document_date : Time? = nil, to_document_date : Time? = nil, counteragent_box : Entity::Box? = nil) : Array(Entity::Document)
-      return @all_documents.not_nil! unless @all_documents.nil?
       index_key = ""
-      @all_documents = [] of Entity::Document
+      all_documents = [] of Entity::Document
       while true
         r = get_documents(box: box, index_key: index_key, filter_category: filter_category, from_document_date: from_document_date, to_document_date: to_document_date, counteragent_box: counteragent_box)
-        @all_documents = @all_documents.not_nil! + r.documents
+        all_documents = all_documents + r.documents
         if last = r.documents.last?
           index_key = last.index_key
         else
@@ -166,7 +165,7 @@ module DiadocApi
         end
       end
 
-      @all_documents.not_nil!
+      all_documents
     end
 
     def first_box : Entity::Box?
