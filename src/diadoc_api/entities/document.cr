@@ -102,7 +102,7 @@ module DiadocApi
           document_number
         end
 
-        date_str.try{|str| Time.parse(str, "%d.%m.%y", Time::Location.load("Europe/Moscow"))}
+        date_str.try{|str| Time.parse(str, "%d.%m.%Y", Time::Location.load("Europe/Moscow"))}
       end
 
       def get_total_sum : Float64?
