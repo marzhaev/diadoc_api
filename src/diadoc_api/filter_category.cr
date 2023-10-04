@@ -17,6 +17,7 @@ module DiadocApi
     end
 
     enum DocumentType
+    Any
     AnyInvoiceDocumentType
     AnyBilateralDocumentType
     AnyUnilateralDocumentType
