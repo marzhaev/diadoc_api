@@ -9,19 +9,23 @@ module DiadocApi
 
       # Convenience methods
 
+      # Search for <Файл to avoid LibXML's run-time errors
       def decoded_data : String?
         if d = @data
-          plain = Base64.decode_string(d)
-          io = IO::Memory.new(plain)
+          io = IO::Memory.new(Base64.decode_string(d))
           io.set_encoding("WINDOWS-1251")
-          io.gets_to_end
+          str = io.gets_to_end
+          if index = str.byte_index("<Файл")
+            str.delete_at(0, index)
+          else
+            str
+          end
         end
       end
 
-      def decoded_xml : XML::Document?
+      def decoded_xml : XML::Node?
         if xml = decoded_data
-          xml = xml.gsub("<?xml version=\"1.0\" encoding=\"windows-1251\"?>\r\n","")
-          return XML.parse(xml)
+          XML.parse(xml)
         end
       end
     end
