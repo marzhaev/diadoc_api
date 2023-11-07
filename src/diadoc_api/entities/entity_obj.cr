@@ -4,7 +4,7 @@ module DiadocApi
       include JSON::Serializable
       include JSON::Serializable::Strict
 
-      {% for f in ["EntityId", "ParentEntityId?", "FileName", "SignerBoxId?", "NotDeliveredEventId?", "SignerDepartmentId?", "PacketId?", "AttachmentVersion?", "Version?", "ContentTypeId?", "FileName?"] %}
+      {% for f in ["EntityId", "ParentEntityId?", "FileName", "SignerBoxId?", "NotDeliveredEventId?", "SignerDepartmentId?", "PacketId?", "AttachmentVersion?", "Version?", "ContentTypeId?", "FileName?", "AuthorUserId?"] %}
         diadoc_property({{ f.id.stringify }}, String)
       {% end %}
 
@@ -20,7 +20,7 @@ module DiadocApi
         diadoc_property({{ f.id.stringify }}, Int64)
       {% end %}
 
-      {% for f in ["EntityType", "Content", "AttachmentType", "ResolutionInfo", "ResolutionRequestInfo", "ResolutionRequestDenialInfo", "ResolutionRouteAssignmentInfo", "ResolutionRouteRemovalInfo", "CancellationInfo", "TemplateTransformationInfo", "TemplateRefusalInfo", "OuterDocflowInfo", "RevocationRequestInfo"] %}
+      {% for f in ["EntityType", "Content", "AttachmentType", "ResolutionInfo", "ResolutionRequestInfo", "ResolutionRequestDenialInfo", "ResolutionRouteAssignmentInfo", "ResolutionRouteRemovalInfo", "CancellationInfo", "TemplateTransformationInfo", "TemplateRefusalInfo", "OuterDocflowInfo", "RevocationRequestInfo", "MoveDocumentInfo"] %}
         diadoc_property({{ f.id.stringify }}, {{ f.id }}?)
       {% end %}
 
