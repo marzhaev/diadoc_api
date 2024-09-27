@@ -42,6 +42,7 @@ module DiadocApi
     IsValid
     IsNotValid
     ValidationError
+    IsNotAttached
     end
   end
 end
