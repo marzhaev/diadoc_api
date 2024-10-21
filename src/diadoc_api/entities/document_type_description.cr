@@ -90,6 +90,9 @@ module DiadocApi
 
       @[JSON::Field(key: "ExtendedDocumentTitleType")]
       property extended_document_title_type : Int32
+
+      @[JSON::Field(key: "SignerUserDataXsdUrl")]
+      property signer_user_data_xsd_url : String?
     end
 
     class DocumentMetadataItem

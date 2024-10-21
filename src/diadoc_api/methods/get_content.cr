@@ -13,7 +13,7 @@ module DiadocApi
 
         if value = function
           io << "&function="
-          io << value
+          io << URI.encode(value)
         end
 
         if value = version

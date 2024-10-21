@@ -64,13 +64,13 @@ module DiadocApi
           end
           # Надо итого НДС и итого с НДС
           io << "<Table Vat=\"#{vat_total}\" Total=\"#{total_w_vat}\""
-          if (l = total_w_vat) && (r = vat_total) && (l > r)
-            io << " TotalWithVatExcluded=\"#{(l - r).round(2)}\""
-          end
-          io << ">"
-            table_items.each do |item|
-              io << item.to_xml
+            if (l = total_w_vat) && (r = vat_total) && (l > r)
+              io << " TotalWithVatExcluded=\"#{(l - r).round(2)}\""
             end
+            io << ">"
+              table_items.each do |item|
+                io << item.to_xml
+              end
           io << "</Table>"
           if transfer_bases.size > 0
             io << "<TransferInfo OperationInfo=\"Товары переданы\">"
@@ -91,6 +91,10 @@ module DiadocApi
             io << " SignerStatus=\"1\""
             io << " SignerPowersBase=\"Устав\"/>"
           io << "</Signers>"
+          io << "<DocumentShipments>"
+            io << "<DocumentShipment Name=\"УПД\" Number=\"#{document_number.not_nil!}\" Date=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\">"
+            io << "</DocumentShipment>"
+          io << "</DocumentShipments>"
         io << "</UniversalTransferDocumentWithHyphens>"
       end
     end
