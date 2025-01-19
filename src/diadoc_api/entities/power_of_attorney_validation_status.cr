@@ -15,6 +15,9 @@ module DiadocApi
 
       @[JSON::Field(key: "Errors")]
       property errors : Array(PowerOfAttorneyValidationError)
+
+      @[JSON::Field(key: "ValidationProtocol")]
+      property validation_protocol : ValidationProtocolCheckResults?
     end
 
     class PowerOfAttorneyValidationError
@@ -43,6 +46,35 @@ module DiadocApi
     IsNotValid
     ValidationError
     IsNotAttached
+    end
+
+    class ValidationProtocolCheckResults
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "CheckResults")]
+      property check_results : Array(ValidationCheckResult)
+    end
+
+    class ValidationCheckResult
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Status")]
+      property status : PowerOfAttorneyValidationCheckStatus?
+
+      @[JSON::Field(key: "Name")]
+      property name : String
+
+      @[JSON::Field(key: "Error")]
+      property error : PowerOfAttorneyValidationError?
+    end
+
+    enum PowerOfAttorneyValidationCheckStatus
+    PowerOfAttorneyValidationCheckStatus
+    Ok
+    Warning
+    Error
     end
   end
 end
