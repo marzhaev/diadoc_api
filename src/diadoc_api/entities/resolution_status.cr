@@ -13,7 +13,7 @@ module DiadocApi
       property type_ : ResolutionStatusType
 
       @[JSON::Field(key: "Target")]
-      property target : ResolutionTarget
+      property target : ResolutionTarget?
     end
 
     class ResolutionTarget
