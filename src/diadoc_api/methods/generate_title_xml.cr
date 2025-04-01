@@ -1,4 +1,4 @@
-require "./xml_titles/upd_820"
+require "./xml_titles/upd_970"
 
 module DiadocApi
   class GenerateTitleXml < MethodsWrapper
@@ -8,7 +8,7 @@ module DiadocApi
     end
 
 
-    def self.fetch(client : Client, box_id : String, type_named_id = "UniversalTransferDocument", function = "СЧФДОП", version = "utd820_05_01_02_hyphen", index = 0, body : String = "") : String
+    def self.fetch(client : Client, box_id : String, type_named_id = "UniversalTransferDocument", function = "СЧФДОП", version = "utd970_05_03_01", index = 0, body : String = "") : String
       url = String.build do |io|
         io << "https://diadoc-api.kontur.ru/GenerateTitleXml?boxId="
         io << box_id

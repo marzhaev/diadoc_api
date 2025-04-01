@@ -1,5 +1,5 @@
 module DiadocApi
-  class Upd820
+  class Upd970
     property document_date : Time?
     property document_number : String?
     property seller_info : OrgInfo
@@ -31,7 +31,7 @@ module DiadocApi
 
       String.build do |io|
         io << "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-        io << "<UniversalTransferDocumentWithHyphens Function=\"СЧФДОП\" DocumentDate=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\" DocumentNumber=\"#{document_number.not_nil!}\" DocumentCreator=\"1\" DocumentCreatorBase=\"1\" Currency=\"643\">"
+        io << "<UniversalTransferDocument Function=\"СЧФДОП\" DocumentDate=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\" DocumentNumber=\"#{document_number.not_nil!}\" DocumentCreator=\"1\" Currency=\"643\">"
           io << "<Sellers>"
             io << "<Seller>"
               organization_details(io, seller_info)
@@ -73,7 +73,7 @@ module DiadocApi
               end
           io << "</Table>"
           if transfer_bases.size > 0
-            io << "<TransferInfo OperationInfo=\"Товары переданы\">"
+            io << "<TransferInfo OperationInfo=\"Товары переданы\" TransferDate=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\">"
               io << "<TransferBases>"
                 transfer_bases.each do |item|
                   io << item.to_xml
@@ -81,38 +81,44 @@ module DiadocApi
               io << "</TransferBases>"
             io << "</TransferInfo>"
           end
-          io << "<Signers>"
-            io << "<SignerDetails Inn=\"#{signer_inn}\""
-            io << " LastName=\"#{signer_last_name}\""
-            io << " FirstName=\"#{signer_first_name}\""
-            io << " MiddleName=\"#{signer_middle_name}\""
-            io << " SignerPowers=\"5\""
-            io << " SignerType=\"1\""
+          io << "<Signers BoxId=\"#{seller_info.box_id}\">"
+            io << "<Signer"
+            # Inn=\"#{signer_inn}\""
             io << " SignerStatus=\"1\""
-            io << " SignerPowersBase=\"Устав\"/>"
+            io << " SigningDate=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\""
+            io << " SignerPowersConfirmationMethod=\"1\">"
+              io << "<Fio"
+                io << " LastName=\"#{signer_last_name}\""
+                io << " FirstName=\"#{signer_first_name}\""
+                io << " MiddleName=\"#{signer_middle_name}\""
+              io << "/>"
+              # io << "<Position PositionSource=\"Certificate\"/>"
+              # io << "<SignerAdditionalInfo SignerAdditionalInfoSource=\"StorageByTitleTypeId\"/>"
+            io << "</Signer>"
           io << "</Signers>"
           io << "<DocumentShipments>"
-            io << "<DocumentShipment Name=\"УПД\" Number=\"#{document_number.not_nil!}\" Date=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\">"
+            io << "<DocumentShipment DocumentName=\"Счет-фактура и документ об отгрузке товаров (выполнении работ), передаче имущественных прав (документ об оказании услуг)\" DocumentNumber=\"#{document_number.not_nil!}\" DocumentDate=\"#{document_date.not_nil!.to_s("%d.%m.%Y")}\">"
             io << "</DocumentShipment>"
           io << "</DocumentShipments>"
-        io << "</UniversalTransferDocumentWithHyphens>"
+        io << "</UniversalTransferDocument>"
       end
     end
 
+    # As per ExtendedOrganizationInfoUtd970 from UserContractXsd
     def organization_details(io : String::Builder, org : OrgInfo)
       # 1 - для ООО
       # 2 - для ИП
-      org_type = org.inn.try(&.size) == 12 ? 2 : 1
+      org_type = org.inn.try(&.size) == 12 ? 1 : 2
       io << "<OrganizationDetails OrgType=\"#{org_type}\" Inn=\"#{org.inn}\" Kpp=\"#{org.kpp}\" FnsParticipantId=\"#{org.fns_id}\" OrgName=\"#{org.name.not_nil!.gsub('"', "'")}\">"
         io << "<Address>"
           io << "<RussianAddress"
-          io << " ZipCode=\"#{org.zip_code}\"" if !org.zip_code.try(&.empty?)
-          io << " Region=\"#{org.region}\""
-          io << " City=\"#{org.city}\"" if !org.city.try(&.empty?)
-          io << " Street=\"#{org.street}\"" if !org.street.try(&.empty?)
-          io << " Building=\"#{org.building}\"" if !org.building.try(&.empty?)
-          io << " Block=\"#{org.block}\"" if !org.block.try(&.empty?)
-          io << " Apartment=\"#{org.appartment}\"" if !org.appartment.try(&.empty?)
+          io << " ZipCode=\"#{org.zip_code}\"" if !org.zip_code.try(&.empty?) #индекс
+          io << " Region=\"#{org.region}\"" # регион(код)
+          io << " City=\"#{org.city}\"" if !org.city.try(&.empty?) # город
+          io << " Street=\"#{org.street}\"" if !org.street.try(&.empty?) # улица
+          io << " Building=\"#{org.building}\"" if !org.building.try(&.empty?) # дом
+          io << " Block=\"#{org.block}\"" if !org.block.try(&.empty?) # корпус
+          io << " Apartment=\"#{org.appartment}\"" if !org.appartment.try(&.empty?) # квартира
           io << "/>"
         io << "</Address>"
       io << "</OrganizationDetails>"
@@ -146,7 +152,7 @@ module DiadocApi
         {% end %}
 
         String.build do |io|
-          io << "<TransferBase BaseDocumentName=\"#{@document_name.not_nil!}\" BaseDocumentDate=\"#{@document_date.not_nil!.to_s("%d.%m.%Y")}\">"
+          io << "<TransferBase DocumentName=\"УПД\" DocumentNumber=\"#{@document_name.not_nil!}\" DocumentDate=\"#{@document_date.not_nil!.to_s("%d.%m.%Y")}\">"
           io << "</TransferBase>"
         end
       end
@@ -157,6 +163,7 @@ module DiadocApi
       property unit : Unit? = nil
       property quantity : Int32? = nil
       property price : Float64? = nil
+      # TODO convert to Enum as per <xs:simpleType name="TaxRateUtd970">
       property tax_rate : TaxRate? = nil
       property total_wo_vat : Float64? = nil
       property vat : Float64? = nil
@@ -176,7 +183,8 @@ module DiadocApi
           io << " Unit=\"#{@unit.not_nil!.to_diadoc}\""
           io << " Quantity=\"#{@quantity}\""
           io << " Price=\"#{@price}\""
-          io << " TaxRate=\"#{@tax_rate.not_nil!.to_diadoc}\""
+          io << " TaxRate=\"TwentyPercent\""
+          # io << " TaxRate=\"#{@tax_rate.not_nil!.to_diadoc}\""
           io << " SubtotalWithVatExcluded=\"#{@total_wo_vat}\""
           io << " Vat=\"#{@vat}\""
           io << " ItemMark=\"#{@item_mark.not_nil!.value}\""
