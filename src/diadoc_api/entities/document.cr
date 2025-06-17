@@ -4,7 +4,7 @@ module DiadocApi
       include JSON::Serializable
       include JSON::Serializable::Strict
 
-      {% for f in ["IndexKey?", "MessageId", "EntityId", "CounteragentBoxId?", "FileName?", "DocumentDate?", "DocumentNumber?", "DepartmentId?", "FromDepartmentId?", "ToDepartmentId?", "CustomDocumentId?", "PacketId?", "RoamingNotificationStatusDescription?", "ResolutionRouteId?", "AttachmentVersion?", "TypeNamedId", "Function", "Title", "EditingSettingId?", "Version", "ProxyBoxId?", "ProxyDepartmentId?", "EventId?"] %}
+      {% for f in ["IndexKey?", "MessageId", "EntityId", "CounteragentBoxId?", "FileName?", "DocumentDate?", "DocumentNumber?", "DepartmentId?", "FromDepartmentId?", "ToDepartmentId?", "CustomDocumentId?", "PacketId?", "RoamingNotificationStatusDescription?", "ResolutionRouteId?", "AttachmentVersion?", "TypeNamedId", "Function", "Title", "EditingSettingId?", "Version", "ProxyBoxId?", "ProxyDepartmentId?", "EventId?", "TtGisFixationCancellationStatus"] %}
         diadoc_property({{ f.id.stringify }}, String)
       {% end %}
 
