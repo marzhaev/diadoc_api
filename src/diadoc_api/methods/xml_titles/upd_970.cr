@@ -109,7 +109,9 @@ module DiadocApi
       # 1 - для ООО
       # 2 - для ИП
       org_type = org.inn.try(&.size) == 12 ? 1 : 2
-      io << "<OrganizationDetails OrgType=\"#{org_type}\" Inn=\"#{org.inn}\" Kpp=\"#{org.kpp}\" FnsParticipantId=\"#{org.fns_id}\" OrgName=\"#{org.name.not_nil!.gsub('"', "'")}\">"
+      io << "<OrganizationDetails OrgType=\"#{org_type}\" Inn=\"#{org.inn}\" FnsParticipantId=\"#{org.fns_id}\" OrgName=\"#{org.name.not_nil!.gsub('"', "'")}\""
+      io << " Kpp=\"org.kpp\"" if org_type == 1
+      io << ">"
         io << "<Address>"
           io << "<RussianAddress"
           io << " ZipCode=\"#{org.zip_code}\"" if !org.zip_code.try(&.empty?) #индекс
