@@ -106,11 +106,9 @@ module DiadocApi
 
     # As per ExtendedOrganizationInfoUtd970 from UserContractXsd
     def organization_details(io : String::Builder, org : OrgInfo)
-      # 1 - для ООО
-      # 2 - для ИП
       org_type = org.inn.try(&.size) == 12 ? 1 : 2
       io << "<OrganizationDetails OrgType=\"#{org_type}\" Inn=\"#{org.inn}\" FnsParticipantId=\"#{org.fns_id}\" OrgName=\"#{org.name.not_nil!.gsub('"', "'")}\""
-      io << " Kpp=\"org.kpp\"" if org_type == 1
+      io << " Kpp=\"#{org.kpp}\"" if org_type == 2
       io << ">"
         io << "<Address>"
           io << "<RussianAddress"

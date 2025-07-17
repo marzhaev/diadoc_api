@@ -10,7 +10,7 @@ require "./diadoc_api/methods/methods_wrapper"
 require "./diadoc_api/methods/*"
 
 module DiadocApi
-  VERSION = "0.2.2"
+  VERSION = "0.2.3"
 
   def self.new(api_token : String, username : String, password : String) : Client
     Client.new(
