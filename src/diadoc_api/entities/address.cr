@@ -14,6 +14,9 @@ module DiadocApi
 
       @[JSON::Field(key: "ForeignAddress")]
       property foreign_address : ForeignAddress?
+
+      @[JSON::Field(key: "GarAddress")]
+      property gar_address : GarAddress?
     end
 
     class RussianAddress
@@ -34,6 +37,86 @@ module DiadocApi
         @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
         property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : String{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
       {% end %}
+    end
+
+    class GarAddress
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      {% for f in ["FiasId", "ZipCode?", "RegionCode", "DivisionType"] %}
+        @[JSON::Field(key: {{ f.id.stringify.gsub(/\?/, "") }} )]
+        property {{ f.id.stringify.underscore.gsub(/\?/, "").id }} : String{{ f.id.stringify.ends_with?('?') ? "?".id : "".id }}
+      {% end %}
+
+      @[JSON::Field(key: "MunicipalDistrict")]
+      property municipal_district : MunicipalDistrict?
+
+      @[JSON::Field(key: "City")]
+      property city : City?
+
+      @[JSON::Field(key: "Street")]
+      property street : Street?
+
+      @[JSON::Field(key: "Garhouse")]
+      property garhouse : Garhouse?
+
+      @[JSON::Field(key: "Settlement")]
+      property settlement : Settlement?
+    end
+
+    class MunicipalDistrict
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Abbreviation")]
+      property abbreviation : String?
+
+      @[JSON::Field(key: "Name")]
+      property name : String?
+    end
+
+    class Street
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Abbreviation")]
+      property abbreviation : String?
+
+      @[JSON::Field(key: "Name")]
+      property name : String?
+    end
+
+    class Garhouse
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Abbreviation")]
+      property abbreviation : String?
+
+      @[JSON::Field(key: "Number")]
+      property number : String?
+    end
+
+    class Settlement
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Abbreviation")]
+      property abbreviation : String?
+
+      @[JSON::Field(key: "Name")]
+      property name : String?
+    end
+
+    class City
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Abbreviation")]
+      property abbreviation : String?
+
+      @[JSON::Field(key: "Name")]
+      property name : String?
     end
   end
 end
