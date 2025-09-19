@@ -62,6 +62,9 @@ module DiadocApi
 
       @[JSON::Field(key: "Settlement")]
       property settlement : Settlement?
+
+      @[JSON::Field(key: "RoomWithinBuilding")]
+      property room_within_building : RoomWithinBuilding?
     end
 
     class MunicipalDistrict
@@ -117,6 +120,17 @@ module DiadocApi
 
       @[JSON::Field(key: "Name")]
       property name : String?
+    end
+
+    class RoomWithinBuilding
+      include JSON::Serializable
+      include JSON::Serializable::Strict
+
+      @[JSON::Field(key: "Abbreviation")]
+      property abbreviation : String?
+
+      @[JSON::Field(key: "Number")]
+      property number : String?
     end
   end
 end
