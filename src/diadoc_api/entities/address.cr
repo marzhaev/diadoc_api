@@ -98,6 +98,18 @@ module DiadocApi
 
       @[JSON::Field(key: "Number")]
       property number : String?
+
+      @[JSON::Field(key: "AddNumber1")]
+      property add_number_1 : String?
+
+      @[JSON::Field(key: "AddAbbreviation1")]
+      property add_abbreviation_1 : String?
+
+      @[JSON::Field(key: "AddNumber2")]
+      property add_number_2 : String?
+
+      @[JSON::Field(key: "AddAbbreviation2")]
+      property add_abbreviation_2 : String?
     end
 
     class Settlement
